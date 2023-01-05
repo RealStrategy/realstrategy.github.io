@@ -5,4 +5,4 @@ Join  - [BLOG](https://todoreal.com)
 
 Demo For You - [DEMO](https://realstrategy.github.io/CC-GENPRO)
 
-![alt text](https://i.imgur.com/ykIX55E.jpg)
+![alt text](https://www.mediafire.com/view/ljzq3odpccdxokd/CC-GENPRO.png/file)
