@@ -1,10 +1,8 @@
-# NAMSO-GEN-2020
+# GENERADOR NAMSO 
 NamsoGen random credit card numbers generator based on your own BIN pattern.
 
-Join Forum - [Black Hat Forum](https://fssquad.com/)
+Join  - [BLOG](https://todoreal.com)
 
-Join  - [BLOG](https://fssquad.com/blog)
-
-Demo For You - [DEMO](https://anon5ec.github.io/NAMSO-GEN-2020)
+Demo For You - [DEMO](https://realstrategy.github.io/CC-GENPRO)
 
 ![alt text](https://i.imgur.com/ykIX55E.jpg)
