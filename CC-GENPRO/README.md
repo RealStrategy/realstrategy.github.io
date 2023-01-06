@@ -1,11 +1,11 @@
 <h1 align='center'>💳 CC GEN</h1>
 
-<b>💞 Random Credit Card Generator Using Bin it will generate multiple Credit Cards Based On Bin | CVC | Date </b>
+<b>💞 Generador de tarjetas usando el algoritmo de Luhn. Tercera version para paginas web. Versiones anteriores se crearon en lenguaje python.| Date </b>
 
 ***
 
-🍃 Demo For You - [Open Here](https://avipatilpro.github.io/CC_Gen/)
+DEMO - [Open Here](https://realstrategy.github.io/CC-GENPRO/)
 
 ---
 
-<h4 align='center'> © 2021 Avishkar Patil 😎 <h4>
+<h4 align='center'> © 2023 @RealStrategy <h4>
