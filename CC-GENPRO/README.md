@@ -1,6 +1,6 @@
-<h1 align='center'>💳 CC GEN</h1>
+<h1 align='center'>💳 CC-GENPRO 💳 </h1>
 
-<b>💞 Generador de tarjetas usando el algoritmo de Luhn. Tercera version para paginas web. Versiones anteriores se crearon en lenguaje python.| Date </b>
+<b>Generador de tarjetas usando el algoritmo de Luhn. Tercera version para paginas web. Versiones anteriores se crearon en lenguaje python. </b>
 
 ***
 
