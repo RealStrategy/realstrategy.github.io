@@ -4,7 +4,7 @@
 
 ***
 
-DEMO - [Open Here](https://realstrategy.github.io/CC-GENPRO/)
+DEMO - [Open Here](https://realstrategy.github.io/CC-GENPROV1/)
 ![alt text](https://raw.githubusercontent.com/RealStrategy/realstrategy.github.io/main/CC-GENPROV1/ccgenpro.png)
 ---
 
