@@ -1,71 +1,58 @@
-function extractData() {
-  var urlInput = document.getElementById("url-input");
-  var url = urlInput.value.trim();
+const extractButton = document.getElementById('extract-button');
+const saveButton = document.getElementById('save-button');
+const inputUrl = document.getElementById('input-url');
+const resultList = document.getElementById('result-list');
 
-  // Validar que la URL tenga el formato correcto
-  var urlPattern = /^(https?:\/\/)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(\/.*)?$/;
-  if (!urlPattern.test(url)) {
-    alert("Ingresa una URL válida en el formato http://www.ejemplo.com");
-    return;
+let extractedUrls = [];
+
+extractButton.addEventListener('click', () => {
+  const url = inputUrl.value;
+  if (url) {
+    extractUrls(url);
   }
+});
 
-  // Realizar una solicitud HTTP para obtener el HTML de la página
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status === 200) {
-      var html = this.responseText;
+saveButton.addEventListener('click', () => {
+  const urls = getExtractedUrls();
+  saveUrls(urls);
+});
 
-      // Extraer URLs y subdominios
-      var urls = extractUrls(html);
-      var subdomains = extractSubdomains(urls);
+function extractUrls(url) {
+  const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 
-      // Mostrar resultados
-      displayResults(urls, subdomains);
-    }
-  };
-  xhttp.open("GET", url, true);
-  xhttp.send();
+  fetch(proxyUrl + url)
+    .then(response => response.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const anchors = doc.getElementsByTagName('a');
+      extractedUrls = Array.from(anchors).map(anchor => anchor.href);
+      displayUrls(extractedUrls);
+    })
+    .catch(error => {
+      console.error('Error al extraer las URLs:', error);
+    });
 }
 
-function extractUrls(html) {
-  var urlRegex = /((https?|ftp):\/\/[^\s/$.?#].[^\s]*)/g;
-  var urls = html.match(urlRegex) || [];
-  return urls;
+// Resto del código...
+
+
+function displayUrls(urls) {
+  resultList.innerHTML = '';
+
+  urls.forEach((url) => {
+    const listItem = document.createElement('li');
+    listItem.innerText = url;
+    listItem.classList.add('result-item');
+    resultList.appendChild(listItem);
+  });
 }
 
-function extractSubdomains(urls) {
-  var subdomains = [];
-  var subdomainRegex = /^(https?:\/\/)?([^\/]+)\./i;
-
-  for (var i = 0; i < urls.length; i++) {
-    var match = urls[i].match(subdomainRegex);
-    if (match && match[2]) {
-      subdomains.push(match[2]);
-    }
-  }
-
-  return subdomains;
+function getExtractedUrls() {
+  return extractedUrls;
 }
 
-function displayResults(urls, subdomains) {
-  var linksList = document.getElementById("links-list");
-  var subdomainsList = document.getElementById("subdomains-list");
-
-  // Limpiar resultados anteriores
-  linksList.innerHTML = "";
-  subdomainsList.innerHTML = "";
-
-  // Mostrar URLs
-  for (var i = 0; i < urls.length; i++) {
-    var linkItem = document.createElement("li");
-    linkItem.textContent = urls[i];
-    linksList.appendChild(linkItem);
-  }
-
-  // Mostrar subdominios
-  for (var j = 0; j < subdomains.length; j++) {
-    var subdomainItem = document.createElement("li");
-    subdomainItem.textContent = subdomains[j];
-    subdomainsList.appendChild(subdomainItem);
-  }
+function saveUrls(urls) {
+  // Aquí puedes agregar tu lógica para guardar las URLs
+  console.log('URLs guardadas:', urls);
 }
