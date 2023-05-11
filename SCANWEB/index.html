@@ -1,26 +1,21 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Extractor de URLs y Subdominios</title>
+  <title>Extractor de URLs</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Extractor de URLs y Subdominios</h1>
-    <div class="form-group">
-      <label for="url-input">INGRESAR LA URL:</label>
-      <input type="text" id="url-input" placeholder="https://www.ejemplo.com">
-      <button class="btn" onclick="extractData()">Extraer</button>
-    </div>
-    <div id="result-section" class="frame">
-      <h2>Enlaces encontrados:</h2>
-      <ul id="links-list"></ul>
-      <h2>Subdominios encontrados:</h2>
-      <ul id="subdomains-list"></ul>
+    <h1 class="title">Extractor de URLs</h1>
+    <input id="input-url" class="input-url" type="text" placeholder="Ingrese la URL">
+    <button id="extract-button" class="button extract-button">Extraer</button>
+    <button id="save-button" class="button save-button">Guardar</button>
+    <div id="result" class="result">
+      <h2 class="result-title">Resultados:</h2>
+      <ul id="result-list" class="result-list"></ul>
     </div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
