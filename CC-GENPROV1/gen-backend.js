@@ -5062,7 +5062,7 @@ function Ti(t, e) {
                         type: "number",
                         name: "ccv2",
                         id: "ccv2",
-                        placeholder: "Leave blank to randomize"
+                        placeholder: "Dejar en blanco para aleatorizar"
                     },
                     domProps: {
                         value: t.ccv2
