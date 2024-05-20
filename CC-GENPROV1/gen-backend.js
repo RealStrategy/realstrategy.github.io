@@ -4946,10 +4946,6 @@ function Ti(t, e) {
                     }
                 }, [t._v("Random")]), t._v(" "), n("option", {
                     attrs: {
-                        value: "2023"
-                    }
-                }, [t._v("2023")]), t._v(" "), n("option", {
-                    attrs: {
                         value: "2024"
                     }
                 }, [t._v("2024")]), t._v(" "), n("option", {
