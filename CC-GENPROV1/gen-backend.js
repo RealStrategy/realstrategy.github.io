@@ -226,7 +226,7 @@
                     attrs: {
                         for: "result"
                     }
-                }, [t._v("Result")]), t._v(" "), n("textarea", {
+                }, [t._v("Resultados")]), t._v(" "), n("textarea", {
                     directives: [{
                         name: "model",
                         rawName: "v-model",
@@ -4629,7 +4629,7 @@ function Ti(t, e) {
                     staticClass: "container text-center"
                 }, [this._m(0), this._v(" "), e("p", {
                     staticClass: "text-muted"
-                }, [this._v("\n            © 2017 - " + this._s(this.year) + " namso-gen. All rights reserved.\n        ")])])])
+                }, [this._v("\n            © 2017 - " + this._s(this.year) + " cc-genpro. All rights reserved.\n        ")])])])
             }, [function() {
                 var t = this.$createElement,
                     e = this._self._c || t;
@@ -4814,7 +4814,7 @@ function Ti(t, e) {
                     attrs: {
                         for: ""
                     }
-                }, [t._v("Date")]), t._v(" "), n("div", {
+                }, [t._v("Fecha")]), t._v(" "), n("div", {
                     staticClass: "input-group"
                 }, [n("span", {
                     staticClass: "input-group-addon"
@@ -5080,7 +5080,7 @@ function Ti(t, e) {
                     attrs: {
                         for: "quantity"
                     }
-                }, [t._v("Quantity")]), t._v(" "), n("input", {
+                }, [t._v("Cantidad")]), t._v(" "), n("input", {
                     directives: [{
                         name: "model",
                         rawName: "v-model",
@@ -5112,7 +5112,7 @@ function Ti(t, e) {
                     attrs: {
                         type: "submit"
                     }
-                }, [this._v("Generate Cards")])])
+                }, [this._v("Generar Tarjetas")])])
             }], !1, null, null, null);
         e.default = a.exports
     },
