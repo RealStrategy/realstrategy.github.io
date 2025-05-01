@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador de IP Inversa</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -11,6 +12,8 @@
       --border-color: #e0e0e0;
       --button-bg: #3b82f6;
       --button-hover: #2563eb;
+      --button-clear-bg: #f44336;
+      --button-clear-hover: #d32f2f;
       --result-bg: #f8f9fa;
     }
 
@@ -79,11 +82,15 @@
       opacity: 0.7;
     }
 
-    button {
-      display: block;
-      width: 100%;
-      padding: 0.75rem;
+    .button-group {
+      display: flex;
+      gap: 0.75rem;
       margin: 1.5rem 0;
+    }
+
+    button {
+      flex: 1;
+      padding: 0.75rem;
       background: var(--button-bg);
       color: white;
       font-weight: 500;
@@ -95,12 +102,25 @@
     }
 
     button:hover {
+      transform: translateY(-1px);
+    }
+
+    #tool-lookup-btn:hover {
       background: var(--button-hover);
+    }
+
+    #tool-clear-btn {
+      background: var(--button-clear-bg);
+    }
+
+    #tool-clear-btn:hover {
+      background: var(--button-clear-hover);
     }
 
     button:disabled {
       background: #cccccc;
       cursor: not-allowed;
+      transform: none;
     }
 
     #tool-result-area {
@@ -114,6 +134,7 @@
       line-height: 1.6;
       overflow-x: auto;
       border: 1px solid var(--border-color);
+      min-height: 100px;
     }
 
     .loading {
@@ -146,6 +167,11 @@
       h2 {
         font-size: 1.3rem;
       }
+      
+      .button-group {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
     }
   </style>
 </head>
@@ -159,7 +185,10 @@
       <input type="text" id="tool-ip-input" placeholder="Ejemplo: 8.8.8.8 o google.com" />
     </div>
 
-    <button id="tool-lookup-btn">Buscar Información</button>
+    <div class="button-group">
+      <button id="tool-lookup-btn">Buscar Información</button>
+      <button id="tool-clear-btn">Limpiar Resultados</button>
+    </div>
 
     <pre id="tool-result-area">Los resultados aparecerán aquí...</pre>
   </div>
@@ -167,20 +196,33 @@
   <script>
     (function () {
       const input = document.getElementById("tool-ip-input");
-      const button = document.getElementById("tool-lookup-btn");
+      const lookupBtn = document.getElementById("tool-lookup-btn");
+      const clearBtn = document.getElementById("tool-clear-btn");
       const resultArea = document.getElementById("tool-result-area");
+
+      // Función para limpiar los resultados
+      function clearResults() {
+        resultArea.textContent = "Los resultados aparecerán aquí...";
+        input.value = "";
+        input.focus();
+      }
+
+      // Evento para el botón de limpiar
+      clearBtn.addEventListener("click", clearResults);
 
       async function toolPerformLookup() {
         const value = input.value.trim();
         
         resultArea.textContent = "Buscando...";
-        button.classList.add('loading');
-        button.disabled = true;
+        lookupBtn.classList.add('loading');
+        lookupBtn.disabled = true;
+        clearBtn.disabled = true;
 
         if (!value) {
           resultArea.textContent = "⚠️ Por favor ingresa una IP o dominio válido";
-          button.classList.remove('loading');
-          button.disabled = false;
+          lookupBtn.classList.remove('loading');
+          lookupBtn.disabled = false;
+          clearBtn.disabled = false;
           return;
         }
 
@@ -205,8 +247,9 @@
             } else {
               output = "❌ No se encontró dirección IP para este dominio";
               resultArea.textContent = output;
-              button.classList.remove('loading');
-              button.disabled = false;
+              lookupBtn.classList.remove('loading');
+              lookupBtn.disabled = false;
+              clearBtn.disabled = false;
               return;
             }
           }
@@ -220,8 +263,9 @@
           if (data.error) {
             output += `❌ Error: ${data.reason || 'No se pudo obtener la información'}`;
             resultArea.textContent = output;
-            button.classList.remove('loading');
-            button.disabled = false;
+            lookupBtn.classList.remove('loading');
+            lookupBtn.disabled = false;
+            clearBtn.disabled = false;
             return;
           }
 
@@ -253,12 +297,13 @@ Tipo de Conexión: ${data.connection_type || "N/A"}
           console.error(err);
           resultArea.textContent = "❌ Error: No se pudo completar la solicitud. Por favor intenta nuevamente.";
         } finally {
-          button.classList.remove('loading');
-          button.disabled = false;
+          lookupBtn.classList.remove('loading');
+          lookupBtn.disabled = false;
+          clearBtn.disabled = false;
         }
       }
 
-      button.addEventListener("click", toolPerformLookup);
+      lookupBtn.addEventListener("click", toolPerformLookup);
       input.addEventListener("keypress", function (e) {
         if (e.key === "Enter") toolPerformLookup();
       });
