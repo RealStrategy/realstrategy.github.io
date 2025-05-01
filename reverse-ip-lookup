@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reverse IP Lookup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 1rem;
+      background-color: #1f2937;
+      color: white;
+      border-radius: 0.75rem;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 0.375rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      background: #3b82f6;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+    }
+
+    #tool-result-area {
+      margin-top: 1.5rem;
+      white-space: pre-wrap;
+      background: #111827;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h2><b>Reverse IP Lookup</b></h2>
+  <p>Ingresa una dirección IP o dominio para buscar información:</p>
+
+  <input type="text" id="tool-ip-input" placeholder="ej: 8.8.8.8 o google.com" />
+  <button id="tool-lookup-btn">Buscar</button>
+
+  <pre id="tool-result-area"></pre>
+
+  <script>
+    (function () {
+      const input = document.getElementById("tool-ip-input");
+      const button = document.getElementById("tool-lookup-btn");
+      const resultArea = document.getElementById("tool-result-area");
+
+      async function toolPerformLookup() {
+        const value = input.value.trim();
+        resultArea.textContent = "";
+
+        if (!value) {
+          resultArea.textContent = "Por favor ingresa una IP o dominio válido.";
+          return;
+        }
+
+        try {
+          let ip = value;
+
+          // Si es un dominio, resolver su IP
+          if (/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(ip)) {
+            const dnsRes = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(ip)}&type=A`, {
+              headers: { 'Accept': 'application/dns-json' }
+            });
+
+            const data = await dnsRes.json();
+
+            if (data.Answer && data.Answer.length > 0) {
+              const aRecords = data.Answer.filter(a => a.type === 1).map(r => r.data);
+              ip = aRecords[0];
+              resultArea.textContent += "Registros A encontrados:\n" + aRecords.join("\n") + "\n\n";
+            } else {
+              resultArea.textContent = "No se encontró una dirección IP para ese dominio.";
+              return;
+            }
+          }
+
+          // Buscar información de la IP
+          const res = await fetch(`https://ipapi.co/${ip}/json/`);
+          const data = await res.json();
+
+          if (data.error) {
+            resultArea.textContent = `Error: ${data.reason}`;
+            return;
+          }
+
+          const output = `
+IP: ${data.ip}
+Tipo: IPv${data.version || 'Desconocido'}
+País: ${data.country_name} (${data.region}, ${data.city})
+Código postal: ${data.postal || 'N/A'}
+Latitud / Longitud: ${data.latitude}, ${data.longitude}
+ISP: ${data.org || 'N/A'}
+ASN: ${data.asn || 'N/A'}
+Organización: ${data.org || 'N/A'}
+Continente: ${data.continent} (${data.continent_code})
+Zona horaria: ${data.timezone || 'N/A'}
+Idioma(s): ${data.languages || 'N/A'}
+Moneda: ${data.currency || 'N/A'}
+Conexión: ${data.connection_type || 'N/A'}
+¿Es tor?: ${data.is_tor ? 'Sí' : 'No'}
+¿Es proxy?: ${data.is_proxy ? 'Sí' : 'No'}
+¿Es hosting?: ${data.is_hosting ? 'Sí' : 'No'}
+
+[Esta herramienta usa APIs públicas]
+          `.trim();
+
+          resultArea.textContent += output;
+        } catch (err) {
+          console.error(err);
+          resultArea.textContent = 'Ocurrió un error al obtener los datos.';
+        }
+      }
+
+      button.addEventListener('click', toolPerformLookup);
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') toolPerformLookup();
+      });
+    })();
+  </script>
+
+</body>
+</html>
