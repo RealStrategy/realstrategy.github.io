@@ -3,85 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reverse IP Lookup</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #111827;
-      --container-bg: #1f2937;
-      --input-bg: #374151;
-      --input-focus: #4b5563;
-      --text-primary: #e5e5e5;
-      --text-secondary: #d1d5db;
-      --text-white: #ffffff;
-      --result-bg: #111827;
-      --button-gradient: linear-gradient(135deg, #3b82f6, #6366f1);
-      --button-hover: linear-gradient(135deg, #2563eb, #4f46e5);
+      --text-primary: #333333;
+      --text-secondary: #555555;
+      --border-color: #e0e0e0;
+      --button-bg: #3b82f6;
+      --button-hover: #2563eb;
+      --result-bg: #f8f9fa;
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg-color);
       color: var(--text-primary);
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+      max-width: 100%;
+      margin: 0 auto;
     }
 
     .container {
       width: 100%;
       max-width: 600px;
-      background-color: var(--container-bg);
-      border-radius: 1rem;
-      padding: 1.5rem;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      margin: 0 auto;
+      padding: 2rem;
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
 
     h2 {
-      margin: 0 0 1rem 0;
+      margin-bottom: 1rem;
       font-weight: 600;
       font-size: 1.5rem;
       text-align: center;
-      color: var(--text-white);
+      color: var(--text-primary);
     }
 
     p {
       text-align: center;
       font-size: 0.95rem;
       color: var(--text-secondary);
-      margin: 0 0 1.5rem 0;
-      line-height: 1.5;
+      margin-bottom: 1.5rem;
     }
 
     .input-group {
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     input[type="text"] {
       width: 100%;
       padding: 0.75rem 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-color);
       border-radius: 0.5rem;
       font-size: 1rem;
-      background-color: var(--input-bg);
-      color: var(--text-white);
+      color: var(--text-primary);
       outline: none;
       transition: all 0.3s ease;
     }
 
     input[type="text"]:focus {
-      background-color: var(--input-focus);
-      border-color: rgba(59, 130, 246, 0.5);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+      border-color: var(--button-bg);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
     input[type="text"]::placeholder {
@@ -93,8 +83,8 @@
       display: block;
       width: 100%;
       padding: 0.75rem;
-      margin: 1rem 0;
-      background: var(--button-gradient);
+      margin: 1.5rem 0;
+      background: var(--button-bg);
       color: white;
       font-weight: 500;
       border: none;
@@ -106,44 +96,38 @@
 
     button:hover {
       background: var(--button-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    button:active {
-      transform: translateY(0);
+    button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
     }
 
     #tool-result-area {
       margin-top: 1.5rem;
       background-color: var(--result-bg);
-      color: #f3f4f6;
+      color: var(--text-primary);
       padding: 1.25rem;
       border-radius: 0.5rem;
       white-space: pre-wrap;
       font-size: 0.95rem;
       line-height: 1.6;
       overflow-x: auto;
-      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      max-height: 400px;
-      overflow-y: auto;
+      border: 1px solid var(--border-color);
     }
 
     .loading {
       position: relative;
-      pointer-events: none;
-      opacity: 0.8;
     }
 
     .loading::after {
       content: "";
       position: absolute;
+      right: 1rem;
       top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 20px;
-      height: 20px;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
       border: 3px solid rgba(255, 255, 255, 0.3);
       border-top-color: white;
       border-radius: 50%;
@@ -151,20 +135,16 @@
     }
 
     @keyframes spin {
-      to { transform: translate(-50%, -50%) rotate(360deg); }
+      to { transform: translateY(-50%) rotate(360deg); }
     }
 
     @media (max-width: 480px) {
       .container {
-        padding: 1.25rem;
+        padding: 1.5rem;
       }
       
       h2 {
         font-size: 1.3rem;
-      }
-      
-      input[type="text"], button {
-        padding: 0.65rem;
       }
     }
   </style>
@@ -172,14 +152,14 @@
 <body>
 
   <div class="container">
-    <h2>🔍 Reverse IP Lookup</h2>
+    <h2>🔍 Buscador de IP Inversa</h2>
     <p>Ingresa una dirección IP o dominio para buscar información relacionada</p>
 
     <div class="input-group">
       <input type="text" id="tool-ip-input" placeholder="Ejemplo: 8.8.8.8 o google.com" />
     </div>
 
-    <button id="tool-lookup-btn">Buscar información</button>
+    <button id="tool-lookup-btn">Buscar Información</button>
 
     <pre id="tool-result-area">Los resultados aparecerán aquí...</pre>
   </div>
@@ -193,15 +173,12 @@
       async function toolPerformLookup() {
         const value = input.value.trim();
         
-        // Limpiar resultados anteriores
-        resultArea.textContent = "Buscando información...";
+        resultArea.textContent = "Buscando...";
         button.classList.add('loading');
-        
-        // Deshabilitar botón durante la búsqueda
         button.disabled = true;
 
         if (!value) {
-          resultArea.textContent = "⚠️ Por favor ingresa una IP o dominio válido.";
+          resultArea.textContent = "⚠️ Por favor ingresa una IP o dominio válido";
           button.classList.remove('loading');
           button.disabled = false;
           return;
@@ -211,7 +188,6 @@
           let ip = value;
           let output = "";
 
-          // Si es un dominio, resolver su IP
           if (/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(ip)) {
             output += "🔎 Resolviendo DNS para: " + ip + "\n\n";
             
@@ -227,7 +203,7 @@
               ip = aRecords[0];
               output += "✅ Registros A encontrados:\n" + aRecords.join("\n") + "\n\n";
             } else {
-              output = "❌ No se encontró una dirección IP para ese dominio.";
+              output = "❌ No se encontró dirección IP para este dominio";
               resultArea.textContent = output;
               button.classList.remove('loading');
               button.disabled = false;
@@ -235,7 +211,6 @@
             }
           }
 
-          // Buscar información de la IP
           output += "🌍 Buscando información geográfica para: " + ip + "\n\n";
           resultArea.textContent = output;
           
@@ -243,7 +218,7 @@
           const data = await res.json();
 
           if (data.error) {
-            output += `❌ Error: ${data.reason || 'No se pudo obtener información'}`;
+            output += `❌ Error: ${data.reason || 'No se pudo obtener la información'}`;
             resultArea.textContent = output;
             button.classList.remove('loading');
             button.disabled = false;
@@ -256,16 +231,16 @@ Tipo: IPv${data.version || "Desconocido"}
 País: ${data.country_name || "N/A"} (${data.country_code || "N/A"})
 Región: ${data.region || "N/A"}
 Ciudad: ${data.city || "N/A"}
-Código postal: ${data.postal || "N/A"}
+Código Postal: ${data.postal || "N/A"}
 Coordenadas: ${data.latitude || "N/A"}, ${data.longitude || "N/A"}
 ISP: ${data.org || "N/A"}
 ASN: ${data.asn || "N/A"}
-Zona horaria: ${data.timezone || "N/A"}
-Idioma(s): ${data.languages || "N/A"}
+Zona Horaria: ${data.timezone || "N/A"}
+Idiomas: ${data.languages || "N/A"}
 Moneda: ${data.currency || "N/A"} (${data.currency_name || "N/A"})
-Conexión: ${data.connection_type || "N/A"}
+Tipo de Conexión: ${data.connection_type || "N/A"}
 
-🔒 Detección de proxy:
+🔒 Detección de Proxy:
   - TOR: ${data.is_tor ? "✅ Sí" : "❌ No"}
   - Proxy: ${data.is_proxy ? "✅ Sí" : "❌ No"}
   - Hosting: ${data.is_hosting ? "✅ Sí" : "❌ No"}
@@ -276,7 +251,7 @@ Conexión: ${data.connection_type || "N/A"}
           resultArea.textContent = output;
         } catch (err) {
           console.error(err);
-          resultArea.textContent = "❌ Error: No se pudo completar la solicitud. Intenta nuevamente.";
+          resultArea.textContent = "❌ Error: No se pudo completar la solicitud. Por favor intenta nuevamente.";
         } finally {
           button.classList.remove('loading');
           button.disabled = false;
@@ -288,7 +263,6 @@ Conexión: ${data.connection_type || "N/A"}
         if (e.key === "Enter") toolPerformLookup();
       });
       
-      // Enfocar el input al cargar la página
       input.focus();
     })();
   </script>
