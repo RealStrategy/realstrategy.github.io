@@ -2,87 +2,170 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reverse IP Lookup</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-color: #111827;
+      --container-bg: #1f2937;
+      --input-bg: #374151;
+      --input-focus: #4b5563;
+      --text-primary: #e5e5e5;
+      --text-secondary: #d1d5db;
+      --text-white: #ffffff;
+      --result-bg: #111827;
+      --button-gradient: linear-gradient(135deg, #3b82f6, #6366f1);
+      --button-hover: linear-gradient(135deg, #2563eb, #4f46e5);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #111827;
-      color: #e5e5e5;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
       margin: 0;
-      padding: 2rem;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
     }
 
     .container {
+      width: 100%;
       max-width: 600px;
-      margin: auto;
-      background-color: #1f2937;
+      background-color: var(--container-bg);
       border-radius: 1rem;
       padding: 1.5rem;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     }
 
     h2 {
-      margin-top: 0;
+      margin: 0 0 1rem 0;
       font-weight: 600;
       font-size: 1.5rem;
       text-align: center;
-      color: #ffffff;
+      color: var(--text-white);
     }
 
     p {
       text-align: center;
       font-size: 0.95rem;
-      color: #d1d5db;
+      color: var(--text-secondary);
+      margin: 0 0 1.5rem 0;
+      line-height: 1.5;
+    }
+
+    .input-group {
       margin-bottom: 1rem;
     }
 
     input[type="text"] {
       width: 100%;
-      padding: 0.6rem 0.8rem;
-      border: none;
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 0.5rem;
       font-size: 1rem;
-      background-color: #374151;
-      color: #ffffff;
+      background-color: var(--input-bg);
+      color: var(--text-white);
       outline: none;
-      transition: 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     input[type="text"]:focus {
-      background-color: #4b5563;
+      background-color: var(--input-focus);
+      border-color: rgba(59, 130, 246, 0.5);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    input[type="text"]::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.7;
     }
 
     button {
       display: block;
       width: 100%;
-      padding: 0.6rem 1.2rem;
-      margin-top: 1rem;
-      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      padding: 0.75rem;
+      margin: 1rem 0;
+      background: var(--button-gradient);
       color: white;
       font-weight: 500;
       border: none;
       border-radius: 0.5rem;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
+      transition: all 0.3s ease;
+      font-size: 1rem;
     }
 
     button:hover {
-      background: linear-gradient(135deg, #2563eb, #4f46e5);
-      transform: translateY(-1px);
+      background: var(--button-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    button:active {
+      transform: translateY(0);
     }
 
     #tool-result-area {
       margin-top: 1.5rem;
-      background-color: #111827;
+      background-color: var(--result-bg);
       color: #f3f4f6;
-      padding: 1rem;
+      padding: 1.25rem;
       border-radius: 0.5rem;
       white-space: pre-wrap;
       font-size: 0.95rem;
-      line-height: 1.5;
+      line-height: 1.6;
       overflow-x: auto;
-      box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.05);
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .loading {
+      position: relative;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    .loading::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.25rem;
+      }
+      
+      h2 {
+        font-size: 1.3rem;
+      }
+      
+      input[type="text"], button {
+        padding: 0.65rem;
+      }
     }
   </style>
 </head>
@@ -90,13 +173,15 @@
 
   <div class="container">
     <h2>🔍 Reverse IP Lookup</h2>
-    <p>Ingresa una dirección IP o dominio para buscar información:</p>
+    <p>Ingresa una dirección IP o dominio para buscar información relacionada</p>
 
-    <input type="text" id="tool-ip-input" placeholder="ej: google.com o 8.8.8.8" />
+    <div class="input-group">
+      <input type="text" id="tool-ip-input" placeholder="Ejemplo: 8.8.8.8 o google.com" />
+    </div>
 
-    <button id="tool-lookup-btn">Buscar</button>
+    <button id="tool-lookup-btn">Buscar información</button>
 
-    <pre id="tool-result-area"></pre>
+    <pre id="tool-result-area">Los resultados aparecerán aquí...</pre>
   </div>
 
   <script>
@@ -107,68 +192,94 @@
 
       async function toolPerformLookup() {
         const value = input.value.trim();
-        resultArea.textContent = "";
+        
+        // Limpiar resultados anteriores
+        resultArea.textContent = "Buscando información...";
+        button.classList.add('loading');
+        
+        // Deshabilitar botón durante la búsqueda
+        button.disabled = true;
 
         if (!value) {
-          resultArea.textContent = "Por favor ingresa una IP o dominio válido.";
+          resultArea.textContent = "⚠️ Por favor ingresa una IP o dominio válido.";
+          button.classList.remove('loading');
+          button.disabled = false;
           return;
         }
 
         try {
           let ip = value;
+          let output = "";
 
           // Si es un dominio, resolver su IP
           if (/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(ip)) {
+            output += "🔎 Resolviendo DNS para: " + ip + "\n\n";
+            
             const dnsRes = await fetch(
               "https://cloudflare-dns.com/dns-query?name=" + encodeURIComponent(ip) + "&type=A",
               { headers: { Accept: "application/dns-json" } }
             );
+            
             const data = await dnsRes.json();
 
             if (data.Answer && data.Answer.length > 0) {
               const aRecords = data.Answer.filter(a => a.type === 1).map(r => r.data);
               ip = aRecords[0];
-              resultArea.textContent += "Registros A encontrados:\n" + aRecords.join("\n") + "\n\n";
+              output += "✅ Registros A encontrados:\n" + aRecords.join("\n") + "\n\n";
             } else {
-              resultArea.textContent = "No se encontró una dirección IP para ese dominio.";
+              output = "❌ No se encontró una dirección IP para ese dominio.";
+              resultArea.textContent = output;
+              button.classList.remove('loading');
+              button.disabled = false;
               return;
             }
           }
 
           // Buscar información de la IP
+          output += "🌍 Buscando información geográfica para: " + ip + "\n\n";
+          resultArea.textContent = output;
+          
           const res = await fetch(`https://ipapi.co/${ip}/json/`);
           const data = await res.json();
 
           if (data.error) {
-            resultArea.textContent = `Error: ${data.reason}`;
+            output += `❌ Error: ${data.reason || 'No se pudo obtener información'}`;
+            resultArea.textContent = output;
+            button.classList.remove('loading');
+            button.disabled = false;
             return;
           }
 
-          const output = `
-IP: ${data.ip}
+          output += `
+IP: ${data.ip || "N/A"}
 Tipo: IPv${data.version || "Desconocido"}
-País: ${data.country_name} (${data.region}, ${data.city})
+País: ${data.country_name || "N/A"} (${data.country_code || "N/A"})
+Región: ${data.region || "N/A"}
+Ciudad: ${data.city || "N/A"}
 Código postal: ${data.postal || "N/A"}
-Latitud / Longitud: ${data.latitude}, ${data.longitude}
+Coordenadas: ${data.latitude || "N/A"}, ${data.longitude || "N/A"}
 ISP: ${data.org || "N/A"}
 ASN: ${data.asn || "N/A"}
-Organización: ${data.org || "N/A"}
-Continente: ${data.continent} (${data.continent_code})
 Zona horaria: ${data.timezone || "N/A"}
 Idioma(s): ${data.languages || "N/A"}
-Moneda: ${data.currency || "N/A"}
+Moneda: ${data.currency || "N/A"} (${data.currency_name || "N/A"})
 Conexión: ${data.connection_type || "N/A"}
-¿Es tor?: ${data.is_tor ? "Sí" : "No"}
-¿Es proxy?: ${data.is_proxy ? "Sí" : "No"}
-¿Es hosting?: ${data.is_hosting ? "Sí" : "No"}
 
-[Esta herramienta usa APIs públicas]
+🔒 Detección de proxy:
+  - TOR: ${data.is_tor ? "✅ Sí" : "❌ No"}
+  - Proxy: ${data.is_proxy ? "✅ Sí" : "❌ No"}
+  - Hosting: ${data.is_hosting ? "✅ Sí" : "❌ No"}
+
+🔄 Actualizado: ${new Date().toLocaleString()}
           `.trim();
 
-          resultArea.textContent += output;
+          resultArea.textContent = output;
         } catch (err) {
           console.error(err);
-          resultArea.textContent = "Ocurrió un error al obtener los datos.";
+          resultArea.textContent = "❌ Error: No se pudo completar la solicitud. Intenta nuevamente.";
+        } finally {
+          button.classList.remove('loading');
+          button.disabled = false;
         }
       }
 
@@ -176,6 +287,9 @@ Conexión: ${data.connection_type || "N/A"}
       input.addEventListener("keypress", function (e) {
         if (e.key === "Enter") toolPerformLookup();
       });
+      
+      // Enfocar el input al cargar la página
+      input.focus();
     })();
   </script>
 
