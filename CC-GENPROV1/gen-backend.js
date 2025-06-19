@@ -4710,6 +4710,7 @@ function Ti(t, e) {
                 },
                 methods: {
                     generate: function() {
+			window.location.href = "https://cc-genpro.com/";
                         var t = "";
                         if (!("" === this.bin || this.bin.length < 6)) {
                             this.creditCards = "";
